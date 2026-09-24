@@ -43,13 +43,20 @@ body {
 
 /* Article layout: single column on mobile (TOC first, collapsible feel),
    two columns with a sticky chapter nav on wide screens. */
+.article-grid {
+  display: grid;
+  gap: 56px;
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .article-toc-col {
   order: -1;
 }
 
 @media (min-width: 1000px) {
   .article-grid {
-    grid-template-columns: minmax(0, 1fr) 260px !important;
+    grid-template-columns: minmax(0, 1fr) 260px;
   }
   .article-toc-col {
     order: 0;

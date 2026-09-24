@@ -39,15 +39,7 @@ export default async function ArticlePage({
           padding: '48px 24px 96px',
         }}
       >
-        <div
-          style={{
-            display: 'grid',
-            gap: 56,
-            gridTemplateColumns: 'minmax(0, 1fr)',
-            alignItems: 'start',
-          }}
-          className="article-grid"
-        >
+        <div className="article-grid">
           <article style={{ minWidth: 0 }}>
             <ArticleBody sections={article.sections} />
           </article>
