@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="zh-CN"
       data-color-mode="dark"
       data-light-theme="light"
       data-dark-theme="dark"

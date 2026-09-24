@@ -1,8 +1,11 @@
 import { Hero } from '@/components/site/hero'
 import { CategoryTabs } from '@/components/site/category-tabs'
 import { SiteFooter } from '@/components/site/site-footer'
+import { getCategoriesWithArticles } from '@/lib/content/articles'
 
 export default function Page() {
+  const categories = getCategoriesWithArticles()
+
   return (
     <main>
       <Hero />
@@ -13,7 +16,7 @@ export default function Page() {
           padding: '56px 24px 96px',
         }}
       >
-        <CategoryTabs />
+        <CategoryTabs categories={categories} />
       </div>
       <SiteFooter />
     </main>

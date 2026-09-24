@@ -1,0 +1,6 @@
+{
+  "label": "AI 底层及应用",
+  "description": "从 Transformer 的数学直觉到生产级 Agent 系统的工程实践。",
+  "order": 10,
+  "icon": "cpu"
+}

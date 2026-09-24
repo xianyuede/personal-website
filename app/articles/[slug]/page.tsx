@@ -1,10 +1,16 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getArticle, categories } from '@/lib/articles'
+import { getAllArticles, getArticle } from '@/lib/content/articles'
 import { ArticleBody } from '@/components/site/article-body'
 import { ArticleToc } from '@/components/site/article-toc'
 import { ArticleHeader } from '@/components/site/article-header'
 import { SiteFooter } from '@/components/site/site-footer'
+
+export const dynamicParams = false
+
+export function generateStaticParams() {
+  return getAllArticles().map((article) => ({ slug: article.slug }))
+}
 
 export async function generateMetadata({
   params,
@@ -26,11 +32,9 @@ export default async function ArticlePage({
   const article = getArticle(slug)
   if (!article) notFound()
 
-  const category = categories.find((c) => c.id === article.category)!
-
   return (
     <main>
-      <ArticleHeader article={article} categoryLabel={category.label} />
+      <ArticleHeader article={article} categoryLabel={article.categoryLabel} />
 
       <div
         style={{
@@ -41,11 +45,11 @@ export default async function ArticlePage({
       >
         <div className="article-grid">
           <article style={{ minWidth: 0 }}>
-            <ArticleBody sections={article.sections} />
+            <ArticleBody content={article.content} />
           </article>
 
           <aside className="article-toc-col">
-            <ArticleToc sections={article.sections} />
+            <ArticleToc items={article.toc} />
           </aside>
         </div>
       </div>
@@ -54,4 +58,3 @@ export default async function ArticlePage({
     </main>
   )
 }
-

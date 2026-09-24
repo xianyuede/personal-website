@@ -7,20 +7,17 @@ import {
   CalendarIcon,
   ClockIcon,
 } from '@primer/octicons-react'
-import type { Article } from '@/lib/articles'
+import type { ArticleSummary } from '@/types/content'
 
 function formatDate(iso: string) {
-  const d = new Date(iso)
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(
-    d.getDate()
-  ).padStart(2, '0')}`
+  return iso.replaceAll('-', '.')
 }
 
 export function ArticleHeader({
   article,
   categoryLabel,
 }: {
-  article: Article
+  article: ArticleSummary
   categoryLabel: string
 }) {
   return (

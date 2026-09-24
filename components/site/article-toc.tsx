@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { Text } from '@primer/react'
-import type { Section } from '@/lib/articles'
+import type { TocItem } from '@/types/content'
 
-export function ArticleToc({ sections }: { sections: Section[] }) {
-  const [activeId, setActiveId] = useState(sections[0]?.id)
+export function ArticleToc({ items }: { items: TocItem[] }) {
+  const [activeId, setActiveId] = useState(items[0]?.id)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -18,12 +18,14 @@ export function ArticleToc({ sections }: { sections: Section[] }) {
       { rootMargin: '-96px 0px -60% 0px', threshold: 0 }
     )
 
-    sections.forEach((s) => {
-      const el = document.getElementById(s.id)
+    items.forEach((item) => {
+      const el = document.getElementById(item.id)
       if (el) observer.observe(el)
     })
     return () => observer.disconnect()
-  }, [sections])
+  }, [items])
+
+  if (items.length === 0) return null
 
   return (
     <nav aria-label="章节导航" style={{ position: 'sticky', top: 32 }}>
@@ -41,23 +43,23 @@ export function ArticleToc({ sections }: { sections: Section[] }) {
         目录
       </Text>
       <ol style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-        {sections.map((section, i) => {
-          const active = section.id === activeId
+        {items.map((item, i) => {
+          const active = item.id === activeId
           return (
-            <li key={section.id} style={{ position: 'relative' }}>
+            <li key={item.id} style={{ position: 'relative' }}>
               <a
-                href={`#${section.id}`}
+                href={`#${item.id}`}
                 onClick={(e) => {
                   e.preventDefault()
                   document
-                    .getElementById(section.id)
+                    .getElementById(item.id)
                     ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                 }}
                 style={{
                   display: 'flex',
                   gap: 12,
                   alignItems: 'baseline',
-                  padding: '8px 0 8px 16px',
+                  padding: `8px 0 8px ${item.level === 3 ? 32 : 16}px`,
                   textDecoration: 'none',
                   borderLeft: `2px solid ${
                     active
@@ -81,7 +83,7 @@ export function ArticleToc({ sections }: { sections: Section[] }) {
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span style={{ fontSize: 'var(--text-body-size)', lineHeight: 1.4 }}>
-                  {section.heading}
+                  {item.title}
                 </span>
               </a>
             </li>

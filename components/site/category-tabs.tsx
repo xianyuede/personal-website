@@ -2,20 +2,31 @@
 
 import { useState } from 'react'
 import { UnderlineNav, Heading, Text, Stack } from '@primer/react'
-import { CpuIcon, HeartIcon, GraphIcon, type Icon } from '@primer/octicons-react'
-import { categories, getArticlesByCategory, type CategoryId } from '@/lib/articles'
+import {
+  BookIcon,
+  CpuIcon,
+  HeartIcon,
+  GraphIcon,
+  type Icon,
+} from '@primer/octicons-react'
+import type { CategoryWithArticles } from '@/types/content'
 import { ArticleCard } from './article-card'
 
-const iconFor: Record<CategoryId, Icon> = {
-  ai: CpuIcon,
-  life: HeartIcon,
-  invest: GraphIcon,
+const iconFor: Record<string, Icon> = {
+  cpu: CpuIcon,
+  heart: HeartIcon,
+  graph: GraphIcon,
+  book: BookIcon,
 }
 
-export function CategoryTabs() {
-  const [active, setActive] = useState<CategoryId>('ai')
-  const activeCategory = categories.find((c) => c.id === active)!
-  const list = getArticlesByCategory(active)
+export function CategoryTabs({ categories }: { categories: CategoryWithArticles[] }) {
+  const [active, setActive] = useState(categories[0]?.id ?? '')
+  const activeCategory =
+    categories.find((category) => category.id === active) ?? categories[0]
+
+  if (!activeCategory) {
+    return <Text style={{ color: 'var(--fgColor-muted)' }}>暂时还没有文章分类。</Text>
+  }
 
   return (
     <section aria-label="文章分类" style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
@@ -23,9 +34,9 @@ export function CategoryTabs() {
         {categories.map((category) => (
           <UnderlineNav.Item
             key={category.id}
-            icon={iconFor[category.id]}
+            icon={iconFor[category.icon ?? ''] ?? BookIcon}
             aria-current={category.id === active ? 'page' : undefined}
-            counter={getArticlesByCategory(category.id).length}
+            counter={category.articles.length}
             onSelect={(e) => {
               e.preventDefault()
               setActive(category.id)
@@ -52,7 +63,7 @@ export function CategoryTabs() {
           gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
         }}
       >
-        {list.map((article) => (
+        {activeCategory.articles.map((article) => (
           <ArticleCard key={article.slug} article={article} />
         ))}
       </div>
