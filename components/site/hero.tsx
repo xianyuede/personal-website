@@ -51,7 +51,7 @@ export function Hero() {
       >
         <Stack direction="vertical" gap="normal">
           <Avatar
-            src="/images/avatar.png"
+            src="/images/avatar-2026.png"
             size={96}
             square={false}
             alt="站长头像"
